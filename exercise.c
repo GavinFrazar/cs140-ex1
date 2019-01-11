@@ -134,6 +134,13 @@ int set_key_action(struct key_action *rec, char *cmd, int (*f)()) {
 
 int match_action(struct key_action map[], char *cmd, int arg) {
   /*Your solution*/
+  if (map && cmd) {
+    int i;
+    for (i = 0; map[i].cmd != NULL; ++i) {
+      if (strcmp(map[i].cmd, cmd) == 0)
+        return map[i].func(arg);
+    }
+  }
   return arg;
 }
 
