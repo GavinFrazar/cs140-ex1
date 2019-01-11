@@ -83,7 +83,18 @@ int add3(int x) { return x + 3; }
  */
 int match_add(char *cmd, int arg) {
   /*Your solution*/
-  return arg;
+  if (cmd) {
+    if (strcmp("add1", cmd) == 0)
+      return arg + 1;
+    else if (strcmp("add2", cmd) == 0)
+      return arg + 2;
+    else if (strcmp("add3", cmd) == 0)
+      return arg + 3;
+    else
+      return arg;
+  } else {
+    return arg;
+  }
 }
 
 /*-------------------------------------------------------------------
