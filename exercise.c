@@ -51,7 +51,17 @@ int exchange(int *a, int *b) {
  */
 int reverse_array(int a[], int size) {
   /*Your solution*/
-  return FAIL;
+  if (a && size > 0) {
+    int i;
+    for (i = 0; i < size / 2; ++i) {
+      if (exchange(&a[i], &a[size - i - 1]) == FAIL) {
+        return FAIL;
+      };
+    }
+    return SUCC;
+  } else {
+    return FAIL;
+  }
 }
 /*-------------------------------------------------------------------
  *Function: add1, add2, add3
