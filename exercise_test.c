@@ -49,9 +49,9 @@ char *reverse_array_test(void) {
             reverse_array(NULL, 3) == FAIL);
   mu_assert("Failed to detect 0 length array", reverse_array(arr, 0) == FAIL);
   mu_assert("Failed to successfully sort valid even array",
-            reverse_array(even_arr, sizeof(even_arr)/sizeof(int)) == SUCC);
+            reverse_array(even_arr, sizeof(even_arr) / sizeof(int)) == SUCC);
   mu_assert("Failed to successfully sort valid odd array",
-            reverse_array(odd_arr, sizeof(odd_arr)/sizeof(int)) == SUCC);
+            reverse_array(odd_arr, sizeof(odd_arr) / sizeof(int)) == SUCC);
   mu_assert("Failed to reverse even length array",
             even_arr[0] == 4 && even_arr[1] == 3 && even_arr[2] == 2 &&
                 even_arr[3] == 1);
@@ -66,7 +66,13 @@ char *reverse_array_test(void) {
  */
 char *match_add_test(void) {
   /*Your solution*/
-  return "failed match_add test";
+  mu_assert("Failed to detect NULL cmd", match_add(NULL, 2) == 2);
+  mu_assert("Failed to return unchanged arg for no matching cmd",
+            match_add("add7", 1) == 1);
+  mu_assert("Failed to correctly match add1 cmd", match_add("add1", 1) == 2);
+  mu_assert("Failed to correctly match add2 cmd", match_add("add2", 1) == 3);
+  mu_assert("Failed to correctly match add3 cmd", match_add("add3", 1) == 4);
+  return NULL;
 }
 
 /*-------------------------------------------------------------------
