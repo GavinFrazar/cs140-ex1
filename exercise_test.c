@@ -41,7 +41,23 @@ char *exchange_test(void) {
  */
 char *reverse_array_test(void) {
   /*Your solution*/
-  return "failed reverse_array test";
+  int arr[] = {1, 2};
+  int even_arr[] = {1, 2, 3, 4};
+  int odd_arr[] = {1, 2, 3};
+
+  mu_assert("Failed to detect invalid array pointer",
+            reverse_array(NULL, 3) == FAIL);
+  mu_assert("Failed to detect 0 length array", reverse_array(arr, 0) == FAIL);
+  mu_assert("Failed to successfully sort valid even array",
+            reverse_array(even_arr, sizeof(even_arr)/sizeof(int)) == SUCC);
+  mu_assert("Failed to successfully sort valid odd array",
+            reverse_array(odd_arr, sizeof(odd_arr)/sizeof(int)) == SUCC);
+  mu_assert("Failed to reverse even length array",
+            even_arr[0] == 4 && even_arr[1] == 3 && even_arr[2] == 2 &&
+                even_arr[3] == 1);
+  mu_assert("Failed to revere odd length array",
+            odd_arr[0] == 3 && odd_arr[1] == 2 && odd_arr[2] == 1);
+  return NULL;
 }
 /*-------------------------------------------------------------------
  * Test match_add()
