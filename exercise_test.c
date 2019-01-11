@@ -1,193 +1,193 @@
 /* File:     exercise_test.c
  *
- * Purpose:  Unit tests for functions defined in exercise.c 
+ * Purpose:  Unit tests for functions defined in exercise.c
  *
  * Compile:  gcc -g -Wall -o exercise exercise.c exercise_test.c
  * Run:      ./exercise
  *
  */
+#include "exercise.h"
+#include "minunit.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "minunit.h"
-#include "exercise.h"
-
 
 /*-------------------------------------------------------------------
- * Test exchange() 
+ * Test exchange()
  * If failed, return a message string showing the failed point
- * If successful, return NULL 
+ * If successful, return NULL
  */
-char *exchange_test(void){
- 	/*Your solution*/
-	return "failed exchange test";
-}  
-
-/*-------------------------------------------------------------------
- * Test reverse_array() 
- * If failed, return a message string showing the failed point
- * If successful, return NULL 
- */
-char *reverse_array_test(void){
- 	/*Your solution*/
-	return "failed reverse_array test";
-}  
-/*-------------------------------------------------------------------
- * Test match_add() 
- * If failed, return a message string showing the failed point
- * If successful, return NULL 
- */
-char *match_add_test(void){
- 	/*Your solution*/
-	return "failed match_add test";
-}  
-
-
-/*-------------------------------------------------------------------
- * Test set_key_action() 
- * If failed, return a message string showing the failed point
- * If successful, return NULL 
- */
-int del1(int x){
-        return x-1;
-}
-int del2(int x){
-        return x-2;
-}
-
-char * set_key_action_test(void){
-	struct key_action *rec= (struct key_action *) malloc(sizeof(struct key_action));
-	char *key="del1";
-	int ret=set_key_action(rec, key, del1);
-        mu_assert("Error in set_key_action with del1 key", strcmp(key, rec->cmd)==0);
-        mu_assert("Error in set_key_action with del1 value", rec->func == del1);
-        mu_assert("Error in set_key_action with del1 value", ret== SUCC);
-        ret=set_key_action(NULL, key, del1);
-        mu_assert("Error in set_key_action with NULL value", ret == FAIL);
-
-	/*All comparisons/tests are valid*/
-	return NULL;
+char *exchange_test(void) {
+  /*Your solution*/
+  int a, b, dummy;
+  int *c = NULL;
+  a = 3;
+  b = 4;
+  mu_assert("failed to identify invalid pointer in a",
+            exchange(c, &dummy) == FAIL);
+  mu_assert("failed to identify invalid pointer in b",
+            exchange(&dummy, c) == FAIL);
+  mu_assert("failed to identify valid pointers", exchange(&a, &b) == SUCC);
+  mu_assert("failed to swap a and b values", a == 4 && b == 3);
+  exchange(&a, &a);
+  mu_assert("failed to swap pointer with itself", a == 4);
+  return NULL;
 }
 
 /*-------------------------------------------------------------------
- * Test match_action() 
+ * Test reverse_array()
  * If failed, return a message string showing the failed point
- * If successful, return NULL 
+ * If successful, return NULL
+ */
+char *reverse_array_test(void) {
+  /*Your solution*/
+  return "failed reverse_array test";
+}
+/*-------------------------------------------------------------------
+ * Test match_add()
+ * If failed, return a message string showing the failed point
+ * If successful, return NULL
+ */
+char *match_add_test(void) {
+  /*Your solution*/
+  return "failed match_add test";
+}
+
+/*-------------------------------------------------------------------
+ * Test set_key_action()
+ * If failed, return a message string showing the failed point
+ * If successful, return NULL
+ */
+int del1(int x) { return x - 1; }
+int del2(int x) { return x - 2; }
+
+char *set_key_action_test(void) {
+  struct key_action *rec =
+      (struct key_action *)malloc(sizeof(struct key_action));
+  char *key = "del1";
+  int ret = set_key_action(rec, key, del1);
+  mu_assert("Error in set_key_action with del1 key",
+            strcmp(key, rec->cmd) == 0);
+  mu_assert("Error in set_key_action with del1 value", rec->func == del1);
+  mu_assert("Error in set_key_action with del1 value", ret == SUCC);
+  ret = set_key_action(NULL, key, del1);
+  mu_assert("Error in set_key_action with NULL value", ret == FAIL);
+
+  /*All comparisons/tests are valid*/
+  return NULL;
+}
+
+/*-------------------------------------------------------------------
+ * Test match_action()
+ * If failed, return a message string showing the failed point
+ * If successful, return NULL
  */
 
-struct key_action map[] = {
-    { "del1", del1 },
-    { "del2", del2 },
-    { 0, 0 }
- };
-char *match_action_test(void){
- 	/*Your solution*/
-	return "failed match_action test";
-}  
+struct key_action map[] = {{"del1", del1}, {"del2", del2}, {0, 0}};
+char *match_action_test(void) {
+  /*Your solution*/
+  return "failed match_action test";
+}
 /*-------------------------------------------------------------------
  * Test if the  matrix-vector multiplicatioon result is expected.
  * If failed, return a message string showing the failed point
- * If successful, return NULL 
+ * If successful, return NULL
  * m is number of rows and n is the number of columns
  */
-char*  test_vect(double y[], int m, int n){
-	int i;
-	double expected= n*(n-1)/2;
-   	for (i = 0; i < m; i++){
+char *test_vect(double y[], int m, int n) {
+  int i;
+  double expected = n * (n - 1) / 2;
+  for (i = 0; i < m; i++) {
 #ifdef DEBUG1
-		printf("Expected %f actual %f in mat_vect_mult\n", expected, y[i]); 
+    printf("Expected %f actual %f in mat_vect_mult\n", expected, y[i]);
 #endif
-		mu_assert("Error in mat_vect_mult, one mismatch", y[i] ==expected); 
-	}
-	return NULL;
+    mu_assert("Error in mat_vect_mult, one mismatch", y[i] == expected);
+  }
+  return NULL;
 }
 /*-------------------------------------------------------------------
- * Test matrix vector multiplciation 
+ * Test matrix vector multiplciation
  * If failed, return a message string showing the failed point
- * If successful, return NULL 
+ * If successful, return NULL
  */
-char* mat_vect_mult_test1(int m, int n) {
-	int i,j;
-	char *msg;
-	double *A = malloc(m*n*sizeof(double));
-	double *x = malloc(n*sizeof(double));
-   	double *y = malloc(m*sizeof(double));
-   	for (j = 0; j < n; j++){
-      		x[j]=j;
-	}
-   	for (i = 0; i < m; i++){
-      		y[i]=0;
-	}
-	for (i = 0; i < m; i++){
-   		for (j = 0; j < n; j++)
-      			A[i*n+j]=1;
-	}
+char *mat_vect_mult_test1(int m, int n) {
+  int i, j;
+  char *msg;
+  double *A = malloc(m * n * sizeof(double));
+  double *x = malloc(n * sizeof(double));
+  double *y = malloc(m * sizeof(double));
+  for (j = 0; j < n; j++) {
+    x[j] = j;
+  }
+  for (i = 0; i < m; i++) {
+    y[i] = 0;
+  }
+  for (i = 0; i < m; i++) {
+    for (j = 0; j < n; j++)
+      A[i * n + j] = 1;
+  }
 
-   	int ret=mat_vect_mult(A, x, y, m, n);
-	msg=test_vect(y, m, n);	
-   	free(A);
-   	free(x);
-   	free(y);
-	if(msg !=NULL)
-		return msg;
-	if(ret!=SUCC)
-		return "Error in mat_vect_mult return value";
-	return NULL;
-}  
+  int ret = mat_vect_mult(A, x, y, m, n);
+  msg = test_vect(y, m, n);
+  free(A);
+  free(x);
+  free(y);
+  if (msg != NULL)
+    return msg;
+  if (ret != SUCC)
+    return "Error in mat_vect_mult return value";
+  return NULL;
+}
 
 /*-------------------------------------------------------------------
  * Test matrix vector multiplication.
  * If failed, return a message string showing the failed point
- * If successful, return NULL 
+ * If successful, return NULL
  */
-char *mat_vect_mult_test(void){
-	return  mat_vect_mult_test1(2,4);
-}  
+char *mat_vect_mult_test(void) { return mat_vect_mult_test1(2, 4); }
 
-char *mat_vect_mult_test_null(void){
- 	double A=1; 
-	int n=1;	
-	int ret=mat_vect_mult(NULL, NULL, NULL, n, n);
-        mu_assert("Error in mat_mat_mult, NULL input", ret ==FAIL);
-        ret=mat_vect_mult(&A, &A, &A, 0, n);
-        mu_assert("Error in mat_mat_mult, NULL input", ret ==FAIL);
-	return  NULL;
-}  
-
-
-
-/*-------------------------------------------------------------------
- * Test matrix matrix multiplication 
- * If failed, return a message string showing the failed point
- * If successful, return NULL 
- */
-char *mat_mat_mult_test(void){
- 	/* Your solution*/
-	return "failed mat_mat_mult test";
-}  
-/*-------------------------------------------------------------------
- * Run all tests.  Ignore returned messages.
- */
-void run_all_tests(void){
- 	/* Call all tests.  You can add more tests*/
-	mu_run_test(exchange_test);
-	mu_run_test(reverse_array_test);
-	mu_run_test(match_add_test);
-	mu_run_test(set_key_action_test);
-	mu_run_test(match_action_test);
-	mu_run_test(mat_vect_mult_test);
-	mu_run_test(mat_vect_mult_test_null);
-	mu_run_test(mat_mat_mult_test);
+char *mat_vect_mult_test_null(void) {
+  double A = 1;
+  int n = 1;
+  int ret = mat_vect_mult(NULL, NULL, NULL, n, n);
+  mu_assert("Error in mat_mat_mult, NULL input", ret == FAIL);
+  ret = mat_vect_mult(&A, &A, &A, 0, n);
+  mu_assert("Error in mat_mat_mult, NULL input", ret == FAIL);
+  return NULL;
 }
 
 /*-------------------------------------------------------------------
- * The main entrance to run all tests.  
+ * Test matrix matrix multiplication
+ * If failed, return a message string showing the failed point
+ * If successful, return NULL
+ */
+char *mat_mat_mult_test(void) {
+  /* Your solution*/
+  return "failed mat_mat_mult test";
+}
+/*-------------------------------------------------------------------
+ * Run all tests.  Ignore returned messages.
+ */
+void run_all_tests(void) {
+  /* Call all tests.  You can add more tests*/
+  mu_run_test(exchange_test);
+  mu_run_test(reverse_array_test);
+  mu_run_test(match_add_test);
+  mu_run_test(set_key_action_test);
+  mu_run_test(match_action_test);
+  mu_run_test(mat_vect_mult_test);
+  mu_run_test(mat_vect_mult_test_null);
+  mu_run_test(mat_mat_mult_test);
+}
+
+/*-------------------------------------------------------------------
+ * The main entrance to run all tests.
  * If failed, return a message string showing the first failed point
  * Print the test stats
  */
-int main(int argc, char* argv[]){
-	run_all_tests();
-	
-	mu_print_test_summary("Summary:");  
-	return 0;
+int main(int argc, char *argv[]) {
+  run_all_tests();
+
+  mu_print_test_summary("Summary:");
+  return 0;
 }
