@@ -184,7 +184,7 @@ int mat_vect_mult(double matrix_A[] /* in  */, double x[] /* in  */,
  * to be positive. Out args: 	marix_C: result matrix C= C+ A*B. It cannot be
  * NULL. Return SUCC (namely 1) if successful, otherwise 0
  *
- * Matrix format: Row-wise linerized format. A[i][j] is stored in
+ * Matrix format: Row-wise linearized format. A[i][j] is stored in
  * matrix_A[i*matrix_size+j]
  *
  * Square matrix matrix multiplication algorithm with dimension n
@@ -197,5 +197,18 @@ int mat_vect_mult(double matrix_A[] /* in  */, double x[] /* in  */,
 int mat_mat_mult(double *matrix_A, double *matrix_B, double *matrix_C,
                  int matrix_size) {
   /*Your solution*/
-  return FAIL;
+  int i, j, k;
+  if (matrix_A && matrix_B && matrix_C && matrix_size > 0) {
+    for (i = 0; i < matrix_size; ++i) {
+      for (j = 0; j < matrix_size; ++j) {
+        for (k = 0; k < matrix_size; ++k) {
+          matrix_C[i * matrix_size + j] +=
+              matrix_A[i * matrix_size + k] * matrix_B[k * matrix_size + j];
+        }
+      }
+    }
+    return SUCC;
+  } else {
+    return FAIL;
+  }
 }
