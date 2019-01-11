@@ -108,7 +108,13 @@ char *set_key_action_test(void) {
 struct key_action map[] = {{"del1", del1}, {"del2", del2}, {0, 0}};
 char *match_action_test(void) {
   /*Your solution*/
-  return "failed match_action test";
+  mu_assert("Failed to detect NULL map", match_action(NULL, "del1", 1) == 1);
+  mu_assert("Failed to detect NULL cmd", match_action(map, NULL, 1) == 1);
+  mu_assert("Failed to detect no matching action",
+            match_action(map, "del3", 1) == 1);
+  mu_assert("Failed to match del1 cmd", match_action(map, "del1", 1) == 0);
+  mu_assert("Failed to match del2 cmd", match_action(map, "del2", 1) == -1);
+  return NULL;
 }
 /*-------------------------------------------------------------------
  * Test if the  matrix-vector multiplicatioon result is expected.
