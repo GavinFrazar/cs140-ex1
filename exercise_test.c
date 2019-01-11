@@ -191,7 +191,28 @@ char *mat_vect_mult_test_null(void) {
  */
 char *mat_mat_mult_test(void) {
   /* Your solution*/
-  return "failed mat_mat_mult test";
+  enum { mat_size = 3 }; // constexpr without using preprocessor :D
+  int i;
+  double A[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+  double B[] = {11, 12, 13, 14, 15, 16, 17, 18, 19};
+  double C[mat_size * mat_size] = {0};
+  double oracle[] = {90, 96, 102, 216, 231, 246, 342, 366, 390};
+  const double tolerance = 0.01;
+  mu_assert("Failed to detect NULL A",
+            mat_mat_mult(NULL, B, C, mat_size) == FAIL);
+  mu_assert("Failed to detect NULL B",
+            mat_mat_mult(A, NULL, C, mat_size) == FAIL);
+  mu_assert("Failed to detect NULL C",
+            mat_mat_mult(A, B, NULL, mat_size) == FAIL);
+  mu_assert("Failed to detect non-positive size",
+            mat_mat_mult(A, B, C, 0) == FAIL);
+  mu_assert("Failed to successfully return for valid input",
+            mat_mat_mult(A, B, C, mat_size) == SUCC);
+  for (i = 0; i < mat_size * mat_size; ++i) {
+    mu_assert("Failed to correctly implement algorithm",
+              (C[i] - oracle[i]) < tolerance);
+  }
+  return NULL;
 }
 /*-------------------------------------------------------------------
  * Run all tests.  Ignore returned messages.
